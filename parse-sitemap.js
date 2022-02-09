@@ -39,4 +39,15 @@ async function extractUrls(xml, cliFlags) {
   return urls;
 }
 
+async function extractXslUrl(xml) {
+  const $ = cheerio.load(xml, { xmlMode: true });
+  var preamble = $.root()[0].children.filter(x => x.type === "directive");
+  var xslDirective = preamble.find(
+    directive => directive.name === "?xml-stylesheet"
+  );
+  var xslUrl = xslDirective.data.match('href="//(.*?)"');
+  return xslUrl[1];
+}
+
 exports.extractUrls = extractUrls;
+exports.extractXslUrl = extractXslUrl;
