@@ -2,7 +2,7 @@ const url = require("url");
 const path = require("path");
 const axios = require("axios");
 const fse = require("fs-extra");
-const { extractUrls } = require("./parse-sitemap");
+const { extractUrls, extractXslUrl } = require("./parse-sitemap");
 
 const withoutTrailingSlash = (path) => path === `/` ? path : path.replace(/\/$/, ``);
 
@@ -36,8 +36,17 @@ exports.createPages = async ({ actions, graphql }, options) => {
       auth: auth
     }
   );
+
+  const xslUrl = await extractXslUrl(siteMapIndex.data);
+  const xslFile = await axios.get(`https://${xslUrl}`, { auth: auth });
+  await fse.outputFile(path.join(publicPath, `sitemap.xsl`), xslFile.data);
+
   const downloadableXMLNodes = await extractUrls(siteMapIndex.data);
-  siteMapIndex = siteMapIndex.data.replaceAll(baseUrl, gatsbyUrl);
+  siteMapIndex = siteMapIndex.data.replaceAll(
+    xslUrl,
+    `${gatsbyUrl}/sitemap.xsl`
+  );
+  siteMapIndex = siteMapIndex.replaceAll(baseUrl, gatsbyUrl);
   siteMapIndex = siteMapIndex.replaceAll(
     `http://${gatsbyUrl}`,
     `https://${gatsbyUrl}`
@@ -51,7 +60,11 @@ exports.createPages = async ({ actions, graphql }, options) => {
     let mapFromNode = await axios.get(node, {
       auth: auth,
     });
-    mapFromNode = mapFromNode.data.replaceAll(baseUrl, gatsbyUrl);
+    mapFromNode = mapFromNode.data.replaceAll(
+      xslUrl,
+      `${gatsbyUrl}/sitemap.xsl`
+    )
+    mapFromNode = mapFromNode.replaceAll(baseUrl, gatsbyUrl);
     mapFromNode = mapFromNode.replaceAll(`https://${gatsbyUrl}`, `https://${gatsbyUrl}`);
     const url_parts = url.parse(node);
     await fse.outputFile(
