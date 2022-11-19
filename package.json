@@ -3,12 +3,14 @@
   "version": "0.0.1",
   "dependencies": {
     "axios": "^0.21.1",
-    "fs-extra": "^9.1.0",
-    "cheerio": "^1.0.0-rc.5"
+    "cheerio": "^1.0.0-rc.5",
+    "fs-extra": "^9.1.0"
   },
-  "description": "<p align=\"center\">\r   <a href=\"http://www.audallabs.com\">\r     <img alt=\"Audal Labs Logo\" src=\"https://static.audallabs.com/logodark.png\" width=\"90\" />\r   </a>\r </p>",
+  "peerDependencies": {
+    "gatsby": "^3.0.0 || ^4.0.0 || ^5.0.0"
+  },
+  "description": "Gatsby Plugin to source Yoast Sitemap data for seamless headless sites.",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
