@@ -9,7 +9,7 @@
   "peerDependencies": {
     "gatsby": "^3.0.0 || ^4.0.0 || ^5.0.0"
   },
-  "description": "<p align=\"center\">\r   <a href=\"http://www.audallabs.com\">\r     <img alt=\"Audal Labs Logo\" src=\"https://static.audallabs.com/logodark.png\" width=\"90\" />\r   </a>\r </p>",
+  "description": "Gatsby Plugin to source Yoast Sitemap data for seamless headless sites.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
