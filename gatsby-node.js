@@ -29,6 +29,8 @@ exports.createPages = async ({ actions, graphql }, options) => {
 
   gatsbyUrl = gatsbyUrl.replace("https://", "");
   gatsbyUrl = gatsbyUrl.replace("http://", "");
+  baseUrl = baseUrl.replace("https://", "");
+  baseUrl = baseUrl.replace("http://", "");
 
   let siteMapIndex = await axios.get(
     `https://${withoutTrailingSlash(baseUrl)}/sitemap_index.xml`,
