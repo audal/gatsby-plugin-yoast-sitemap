@@ -27,10 +27,8 @@ exports.createPages = async ({ actions, graphql }, options) => {
 
   if (!publicPath) publicPath = `./public`
 
-  gatsbyUrl = gatsbyUrl.replace("https://", "");
-  gatsbyUrl = gatsbyUrl.replace("http://", "");
-  baseUrl = baseUrl.replace("https://", "");
-  baseUrl = baseUrl.replace("http://", "");
+  gatsbyUrl = new URL(gatsbyUrl).host
+  baseUrl = new URL(baseUrl).host
 
   let siteMapIndex = await axios.get(
     `https://${withoutTrailingSlash(baseUrl)}/sitemap_index.xml`,
@@ -48,11 +46,11 @@ exports.createPages = async ({ actions, graphql }, options) => {
     xslUrl,
     `${gatsbyUrl}/sitemap.xsl`
   );
-  siteMapIndex = siteMapIndex.replaceAll(baseUrl, gatsbyUrl);
   siteMapIndex = siteMapIndex.replaceAll(
-    `http://${gatsbyUrl}`,
-    `https://${gatsbyUrl}`
+      `http://${gatsbyUrl}`,
+      `https://${gatsbyUrl}`
   );
+  siteMapIndex = siteMapIndex.replaceAll(baseUrl, gatsbyUrl);
   await fse.outputFile(
     path.join(publicPath, `sitemap_index.xml`),
     siteMapIndex
